@@ -213,7 +213,7 @@ class TimescaleManager(DBManager):
         columns = [desc[0] for desc in self.cursor.description]
         return pd.DataFrame(records, columns=columns)
 
-    def createView(self,tableName: str, viewName: str, schema="mtopeniot"):
+    def createView(self, tableName: str, viewName: str, schema="mtopeniot"):
         """
         Create a view from a specific table inside TimescaleDB. The view can be used to access tables with complex names
         (like NGSI-LD types). The created view will be available in the public schema
