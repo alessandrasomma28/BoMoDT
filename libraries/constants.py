@@ -22,7 +22,9 @@ deviceType = "https://uri.etsi.org/ngsi-ld/default-context/TrafficLoopDevices"
 
 ### SUMO-RELATED CONSTANTS
 # path where the data used for simulation are stored
+citySimulationDataPath = "./SUMO/bologna/data/"
 simulationDataPath = "./SUMO/joined/data/"
+citySimulationPath = "SUMO/bologna/"
 simulationPath = "SUMO/joined/"
 sumoToolsPath = r"C:\Program Files (x86)\Eclipse\Sumo\tools"
 

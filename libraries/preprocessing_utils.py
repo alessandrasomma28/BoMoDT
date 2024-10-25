@@ -4,6 +4,7 @@ import xml.etree.ElementTree as ET
 import datetime
 from libraries.constants import *
 import sumolib
+import os
 
 def filter_roads(input_file, road_file, output_file = 'filtered_output.csv', input_column = 'Nome via', filter_column = 'nome_via'):
     """
@@ -144,20 +145,21 @@ def filter_day(input_file, output_file = 'day_flow.csv', date = "01/02/2024"):
 # Function to map the existing traffic loop and generate an additional SUMO file containing the traffic detectors at
 # corresponding positions
 def generate_detector_file(realDataFile: str, outputPath: str):
-    df = pd.read_csv(realDataFile)
+    df = pd.read_csv(realDataFile, sep=';')
     trafficLoopRoads = df["edge_id"].unique()
     print(len(trafficLoopRoads.shape))
     root = ET.Element('additional')
     for index, road in enumerate(trafficLoopRoads):
-        road = road.replace(" ", "")
-        ET.SubElement(root, 'inductionLoop', id = str(index)+'_0', lane=road+'_0', pos="-5", freq="1800", file="e1_real_output.xml")
+        # road = road.replace(" ", "")
+        if str(road) != "nan":
+            ET.SubElement(root, 'inductionLoop', id = str(index)+'_0', lane=str(road)+'_0', pos="50", freq="1800", file="e1_real_output.xml")
         # ET.SubElement(root, 'inductionLoop', id = str(index)+'_1', lane = road+'_1', pos = "5", freq = "1800", file = "e1_real_output.xml")
     tree = ET.ElementTree(root)
     ET.indent(tree, '  ')
     tree.write(outputPath+"detectors.add.xml", "UTF-8")
 
 #NEW PRE-PROCESSING FUNCTIONS
-def generate_roadnames_file(inputFile, sumoNet, outputFile = 'new_roadnames.csv'):
+def generate_roadnames_file(inputFile, sumoNetFile, outputFile = 'new_roadnames.csv'):
     """
     Using the geopoint coordinates available in the input file, a roadnames file with edge_id linked to each
     road is created. The edge_ids are found using a sumolib function to get edges near to the given coordinates.
@@ -166,29 +168,43 @@ def generate_roadnames_file(inputFile, sumoNet, outputFile = 'new_roadnames.csv'
     :param outputFile: the file name of the new roadnames generated
     :return:
     """
+    # path = os.path.abspath('./SUMO/bologna/full.net.xml')
+    net = sumolib.net.readNet(sumoNetFile)
     input_df = pd.read_csv(inputFile, sep=';')
     df_unique = input_df[['Nome via', 'geopoint']].drop_duplicates()
     # df_unique = input_df[['Nome via']].drop_duplicates()
+    root = ET.Element('additional')
     for index, row in df_unique.iterrows():
         coord = row['geopoint']
         lat, lon = coord.split(',')
         lat = float(lat)
         lon = float(lon)
-        x, y = sumoNet.convertLonLat2XY(lon, lat)
+        x, y = net.convertLonLat2XY(lon, lat)
         print(f"SUMO reference coordinates (x,y): {x, y}")
 
-        candiates_edges = sumoNet.getNeighboringEdges(x, y, r=25)
+        candiates_edges = net.getNeighboringEdges(x, y, r=25)
         # Sorting neighbors by distance
         edges_and_dist = sorted(candiates_edges, key=lambda x: x[1])
 
         if len(edges_and_dist) != 0:
             closest_edge = edges_and_dist[0][0]
+            i = 0
+            print(closest_edge.getType())
+            while closest_edge.getType in ["highway.pedestrian","highway.track", "highway.footway", "highway.path",
+                                           "highway.cycleway", "highway.steps" ]:
+                i += 1
+                closest_edge = edges_and_dist[i][0]
         else:
             continue
         print(f"Name: {closest_edge.getName()}")
         print(f"Edge ID: {closest_edge.getID()}")
         df_unique.at[index, 'edge_id'] = closest_edge.getID()
-    df_unique.to_csv(simulationDataPath + outputFile, sep=';')
+        ET.SubElement(root, 'inductionLoop', id=str(index) + '_0', lane=str(closest_edge.getID()) + '_0', pos="-5", freq="1800",
+                      file="e1_real_output.xml")
+    tree = ET.ElementTree(root)
+    ET.indent(tree, '  ')
+    tree.write(citySimulationDataPath + "detectors.add.xml", "UTF-8")
+    df_unique.to_csv(citySimulationDataPath + outputFile, sep=';')
 
 def fill_missing_edge_id(roadnameFile):
     """
@@ -197,11 +213,15 @@ def fill_missing_edge_id(roadnameFile):
     :return:
     """
     df = pd.read_csv(roadnameFile, sep=';')
+    empty = 0
     for index, row in df.iterrows():
         if pd.isnull(row['edge_id']):
             same_street = df[(df['Nome via'] == row['Nome via']) & (df['edge_id'].notna())]
             if not same_street.empty:
                 df.at[index, 'edge_id'] = same_street['edge_id'].values[0]
+            else:
+                empty += 1
+    print("Road without edge id: " + str(empty))
     df.to_csv(roadnameFile, sep=';')
 
 def link_edge_id(inputFile, roadnameFile):

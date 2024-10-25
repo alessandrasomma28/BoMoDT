@@ -11,10 +11,11 @@ accuracyFile = simulationDataPath + 'accuratezza-spire-anno-2024.csv'  # File ch
 accuracyOutputFile = simulationDataPath + 'accurate_output.csv'
 filterFile = simulationPath + 'roadnames.csv'
 
+
 #NEW FUNCTIONS RUN
-path = os.path.abspath('./SUMO/bologna/full.net.xml')
-net = sumolib.net.readNet(path)
-generate_roadnames_file(inputFile=inputFile, sumoNet=net, outputFile='new_roadnames.csv')
+inputCityFile = citySimulationDataPath + 'traffic_flow_2024.csv'
+netFile = citySimulationPath + 'static/full.net.xml'
+generate_roadnames_file(inputFile=inputCityFile, sumoNetFile=netFile, outputFile='new_roadnames.csv')
 newroadnamesFile = os.path.abspath(simulationDataPath + 'new_roadnames.csv')
 fill_missing_edge_id(newroadnamesFile)
 link_edge_id(inputFile, newroadnamesFile)
