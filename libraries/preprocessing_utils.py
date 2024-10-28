@@ -6,7 +6,7 @@ from libraries.constants import *
 import sumolib
 import os
 
-def filter_roads(input_file, road_file, output_file = 'filtered_output.csv', input_column = 'Nome via', filter_column = 'nome_via'):
+def filter_roads_legacy(input_file, road_file, output_file = 'filtered_output.csv', input_column = 'Nome via', filter_column = 'nome_via'):
     """
     The function filters a traffic input file based on the road names. The input_column and filter_column must be
     specified to match the values of the road names between the input file and the road_file. The result will be written
@@ -74,7 +74,7 @@ def filter_with_accuracy(file_input, file_accuracy, date_column='data', sensor_i
     df.to_csv(output_file, sep=';')
     print("Output with filtered accuracy created. ")
 
-def link_roads_IDs(file_input, road_file_ids, output_file = 'final.csv' ,input_roadname_column = 'Nome via', direction_column = 'direzione', filter_direction_column = 'orientamento',roadname_column = 'nome_via'):
+def link_roads_IDs_legacy(file_input, road_file_ids, output_file = 'final.csv' ,input_roadname_column = 'Nome via', direction_column = 'direzione', filter_direction_column = 'orientamento',roadname_column = 'nome_via'):
     """
     The function adds the road IDs based on the road file given as a new column in the input file. The entries in the
     input file must have a direction (expressed using direction_column) in order to be linked with the right lane ID of
@@ -129,7 +129,7 @@ def generate_edgedata_file(input_file, output_file = 'edgedata.xml' ,date = "01/
         edge = ET.SubElement(interval,'edge', id=edge_id, entered=count)
     tree = ET.ElementTree(root)
     ET.indent(tree, '  ')
-    tree.write(simulationDataPath + output_file, "UTF-8")
+    tree.write(citySimulationDataPath + output_file, "UTF-8")
 
 # TODO
 def link_origin_destination(file_input, file_road_id):
@@ -139,7 +139,7 @@ def link_origin_destination(file_input, file_road_id):
 def filter_day(input_file, output_file = 'day_flow.csv', date = "01/02/2024"):
     df1 = pd.read_csv(input_file, sep=';')
     df1 = df1[df1['data'].str.contains(date)]
-    df1.to_csv(simulationDataPath + output_file, sep=';')
+    df1.to_csv(citySimulationDataPath + output_file, sep=';')
 
 
 # Function to map the existing traffic loop and generate an additional SUMO file containing the traffic detectors at
@@ -195,6 +195,8 @@ def generate_roadnames_file(inputFile, sumoNetFile, outputFile = 'new_roadnames.
                 i += 1
                 closest_edge = edges_and_dist[i][0]
         else:
+            # dropping the loops outside the network
+            df_unique.drop(index, inplace=True)
             continue
         print(f"Name: {closest_edge.getName()}")
         print(f"Edge ID: {closest_edge.getID()}")
@@ -203,7 +205,7 @@ def generate_roadnames_file(inputFile, sumoNetFile, outputFile = 'new_roadnames.
                       file="e1_real_output.xml")
     tree = ET.ElementTree(root)
     ET.indent(tree, '  ')
-    tree.write(citySimulationDataPath + "detectors.add.xml", "UTF-8")
+    tree.write(citySimulationPath + "static/detectors.add.xml", "UTF-8")
     df_unique.to_csv(citySimulationDataPath + outputFile, sep=';')
 
 def fill_missing_edge_id(roadnameFile):
@@ -237,5 +239,10 @@ def link_edge_id(inputFile, roadnameFile):
 
     for index, row in df.iterrows():
         edge = df_roadnames.loc[(df_roadnames['Nome via'] == row['Nome via']) & (df_roadnames['geopoint'] == row['geopoint']), 'edge_id']
+        if len(edge) == 0:
+            df.drop(index, inplace=True)
+            continue
         df.at[index, 'edge_id'] = edge.values
-    df.to_csv(simulationDataPath + 'final.csv', sep=';')
+    newFilePath = citySimulationDataPath + 'final.csv'
+    df.to_csv(newFilePath, sep=';')
+    return newFilePath
