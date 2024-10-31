@@ -11,13 +11,19 @@ accuracyFile = citySimulationDataPath + 'accuratezza-spire-anno-2024.csv'  # Fil
 accuracyOutputFile = citySimulationDataPath + 'accurate_output.csv'
 filterFile = simulationPath + 'roadnames.csv'
 
-# # First the entries are filtered based on the accuracy value of measurement
+netFile = citySimulationPath + 'static/full.net.xml'
+newroadnamesFile = os.path.abspath(citySimulationDataPath + 'new_roadnames.csv')
+generate_detector_csv(accuracyOutputFile)
+add_start_end(inputFile=citySimulationDataPath + "day_flow.csv", roadnameFile=newroadnamesFile,
+              arcFile= citySimulationDataPath + "arcstra.csv", nodeFile=citySimulationDataPath + "nodi.csv", sumoNetFile=netFile)
+generate_flow(citySimulationDataPath + "traffic_with_flow.csv")
+# First the entries are filtered based on the accuracy value of measurement
 filter_with_accuracy(inputFile, accuracyFile, date_column='data', sensor_id_column='codice_spira', output_file=accuracyOutputFile, accepted_percentage=95)
 
 #NEW FUNCTIONS RUN
 inputCityFile = citySimulationDataPath + 'traffic_flow_2024.csv'
 netFile = citySimulationPath + 'static/full.net.xml'
-# generate_roadnames_file(inputFile=accuracyOutputFile, sumoNetFile=netFile, outputFile='new_roadnames.csv')
+generate_roadnames_file(inputFile=accuracyOutputFile, sumoNetFile=netFile, outputFile='new_roadnames.csv')
 newroadnamesFile = os.path.abspath(citySimulationDataPath + 'new_roadnames.csv')
 fill_missing_edge_id(newroadnamesFile)
 fileWithEdges = link_edge_id(accuracyOutputFile, newroadnamesFile)
