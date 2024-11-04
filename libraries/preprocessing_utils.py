@@ -254,7 +254,7 @@ def link_edge_id(inputFile, roadnameFile):
             df.drop(index, inplace=True)
             continue
         df.at[index, 'edge_id'] = edge.values
-    newFilePath = citySimulationDataPath + 'final.csv'
+    newFilePath = citySimulationDataPath + 'processed_traffic_flow.csv'
     df.to_csv(newFilePath, sep=';')
     return newFilePath
 
