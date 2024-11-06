@@ -9,8 +9,17 @@ netFile = simulationPath + "static/joined_lanes.net.xml"
 processedTrafficFlow = simulationDataPath + 'processed_traffic_flow.csv'
 
 def run():
+    ##FUNCTION TO BE TESTED
+    roadnamesFile = os.path.abspath(simulationDataPath + 'roadnames.csv')
+    # addStartEnd(inputFile=processedTrafficFlow, roadnameFile=roadnamesFile,
+    #               arcFile=simulationDataPath + "arcstra.csv", nodeFile=simulationDataPath + "nodes.csv", sumoNetFile=netFile)
+    generateTurnData(simulationDataPath+'day_flow.csv')
+    filterDay(simulationDataPath + "traffic_with_flow.csv", date='01/02/2024')
+    generateFlow(simulationDataPath + "traffic_with_flow.csv")
+
+
     filterForShadowManager(processedTrafficFlow)
-    generateRealFlow(processedTrafficFlow)
+    # generateRealFlow(processedTrafficFlow)
     filterWithAccuracy(inputFile, accuracyFile, date_column='data', sensor_id_column='codice_spira', output_file=accurateInputFile, accepted_percentage=95)
     generateRoadnamesFile(inputFile=accurateInputFile, sumoNetFile=netFile, outputFile='roadnames.csv')
     roadnamesFile = os.path.abspath(simulationDataPath + 'roadnames.csv')

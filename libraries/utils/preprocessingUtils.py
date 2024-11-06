@@ -5,6 +5,7 @@ import datetime
 from libraries.constants import *
 import sumolib
 import os
+from math import cos, asin, sqrt
 
 def filterRoadsLegacy(input_file, road_file, output_file ='filtered_output.csv', input_column ='Nome via', filter_column ='nome_via'):
     """
@@ -280,7 +281,7 @@ def addStartEnd(inputFile, roadnameFile, arcFile, nodeFile, sumoNetFile):
             ending_road_coord = df_nodes.loc[df_nodes['CODICE'] == ending_node]['Geo Point'].values[0]
             coords = [starting_road_coord, ending_road_coord]
             for ind, coord in enumerate(coords):
-                lat, lon = starting_road_coord.split(',')
+                lat, lon = coord.split(',')
                 lat = float(lat)
                 lon = float(lon)
                 x, y = net.convertLonLat2XY(lon, lat)
@@ -330,12 +331,14 @@ def addStartEnd(inputFile, roadnameFile, arcFile, nodeFile, sumoNetFile):
             print("Error, road not found!")
     df.to_csv(simulationDataPath+ "traffic_with_flow.csv", sep=';')
 
-def generateFlow(inputFile, time_slot="07:00-08:00"):
+def generateFlow(inputFile, time_slot="07:00-08:00", date="01/02/2024"):
     df = pd.read_csv(inputFile, sep=';')
     root = ET.Element('routes')
+    df = df[df['data'].str.contains(date)]
     for index, row in df.iterrows():
         start = row["starting_edge_id"]
         end = row["ending_edge_id"]
+        via = row["edge_id"]
         first = int(time_slot[0:2])
         last = int(time_slot[6:8])
         # check if time window is longer than one hour
@@ -377,7 +380,7 @@ def filterForShadowManager(inputFile):
     df.columns = ['StartingPoint', 'EndPoint', 'RoadName', 'Direction', 'Longitude', 'Latitude', 'Geopoint',
                   'TrafficLoopID', 'EdgeID', 'TrafficLoopCode', 'TrafficLoopLevel']
 
-    df = df.drop_duplicates(['RoadName', 'TrafficLoopID'])
+    df = df.drop_duplicates(['RoadName', 'TrafficLoopID', 'Geopoint'])
     if not os.path.isdir(projectPath + '/data/digitalshadow/'):
         os.mkdir(projectPath + '/data/digitalshadow/')
     df.to_csv(projectPath + "/data/digitalshadow/filtered_traffic_flow.csv", sep=';')
@@ -392,3 +395,58 @@ def generateRealFlow(inputFile):
     if not os.path.isdir(projectPath + '/data/realworlddata/mvenvdata'):
         os.mkdir(projectPath + '/data/realworlddata/mvenvdata')
     df.to_csv(projectPath + "/data/realworlddata/mvenvdata/real_traffic_flow.csv", sep=';', index_label='index')
+
+
+
+def generateTurnData(inputFile):
+    df = pd.read_csv(inputFile, sep=';')
+    root = ET.Element('data')
+    interval = ET.SubElement(root, 'interval', id='generated', begin='0', end='3600')
+    for index, row in df.iterrows():
+        start = row['starting_edge_id']
+        end = row['ending_edge_id']
+        count = row['07:00-08:00']
+        edgeId = row['edge_id']
+        edgerelation = ET.SubElement(interval, 'edgeRelation', id=str(edgeId), frm=str(start), to=str(end), count=str(count))
+    tree = ET.ElementTree(root)
+    ET.indent(tree, '  ')
+    tree.write(simulationDataPath + "turn.xml", "UTF-8")
+
+# def distance(lat1, lon1, lat2, lon2):
+#     p = 0.017453292519943295
+#     hav = 0.5 - cos((lat2-lat1)*p)/2 + cos(lat1*p)*cos(lat2*p) * (1-cos((lon2-lon1)*p)) / 2
+#     return 12742 * asin(sqrt(hav))
+#
+# def closest(data, v):
+#     return min(data, key=lambda p: distance(v['lat'],v['lon'],p['lat'],p['lon']))
+
+# def altAddStartEnd(inputFile, roadnameFile, arcFile, nodeFile, sumoNetFile):
+#     df = pd.read_csv(inputFile, sep=';')
+#     df_roadnames = pd.read_csv(roadnameFile, sep=';')
+#     df_arch = pd.read_csv(arcFile, sep=';')
+#     df_nodes = pd.read_csv(nodeFile, sep=';')
+#     net = sumolib.net.readNet(sumoNetFile)
+#     for index, row in df.iterrows():
+#         codvia = row['codice via']
+#         codarco = row['codice arco']
+#         matched = df_arch.loc[(df_arch['CODVIA'] == codvia) & (df_arch['CODARCO'] == codarco)]
+#         if matched.shape[0] > 0:
+#             if type(matched['Da'].values[0]) == float:
+#                 starting_roadname = "None"
+#             else:
+#                 starting_roadname = matched['Da'].values[0].lower()
+#             if type(matched['A'].values[0]) == float:
+#                 ending_roadname = "None"
+#             else:
+#                 ending_roadname = matched['A'].values[0].lower()
+#
+#             starting_node = matched["COD_NODO1"].values[0]
+#             ending_node = matched["COD_NODO2"].values[0]
+#
+#             starting_road_coord = df_nodes.loc[df_nodes['CODICE'] == starting_node]['Geo Point'].values[0]
+#             ending_road_coord = df_nodes.loc[df_nodes['CODICE'] == ending_node]['Geo Point'].values[0]
+#             coords = [starting_road_coord, ending_road_coord]
+#             for index, coord in enumerate(coords):
+#                 lat, lon = starting_road_coord.split(',')
+#                 # v  = {'lat':}
+#                 print("prova")

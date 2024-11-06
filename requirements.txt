@@ -12,3 +12,4 @@ scipy~=1.14.1
 pytz~=2024.1
 pillow~=10.4.0
 matplotlib~=3.9.2
+pyproj~=3.7.0
