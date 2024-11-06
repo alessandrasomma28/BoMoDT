@@ -1,6 +1,6 @@
 @echo off
 
-:: Verify if Docker is installed and running
+:: Check Docker installation and status
 docker version >nul 2>&1
 if %errorlevel% neq 0 (
 	echo Docker is not running or installed.
@@ -8,49 +8,59 @@ if %errorlevel% neq 0 (
     exit /b 1
 )
 
-:: Container name to find
+:: Set container name
 set "container_name=fiware-temporal"
 
-:: Verify if any container with that name exist (active or stopped)
-::echo Verifico la presenza del container: %container_name%
-echo Verifing if any container with this prefix exist: %container_name%
+:: Verify if any container with that name exists
+echo Verifying if any container with this prefix exists: %container_name%
 docker ps -a --filter "name=%container_name%" --format "{{.Names}}" | findstr /i "%container_name%" >nul 2>&1
 if %errorlevel% neq 0 (
-    echo container with "%container_name%" prefix does not exist.
-	cd docker-files/fiware-dt-platform
+    echo Container with "%container_name%" prefix does not exist.
+    cd fiwareenv
 	docker-compose up -d
-	cd ../..
+	cd ..
 ) else (
-    echo  container with "%container_name%" prefix found.
-    cd docker-files/fiware-dt-platform
+    echo Container with "%container_name%" prefix found.
+    cd fiwareenv
 	docker-compose up -d
-	cd ../..
-	
+	cd ..
 )
 echo.
-echo press a button to continue activating python virtual environent
+echo Press a button to continue activating Python virtual environment
 pause
 
-:: Checking if user have persmission to activatea virtual environent and 
+:: Check if user has permission to activate a virtual environment
 powershell -Command "if ((Get-ExecutionPolicy) -ne 'RemoteSigned') { Set-ExecutionPolicy Bypass -Scope CurrentUser -Force }"
 
-:: Activating virtual environent using activate (CMD version)
-if exist .\.venv\Scripts\ (call .\.venv\Scripts\activate.bat) else (if exist .\venv\Scripts\ (call .\venv\Scripts\activate.bat) else (echo path for activation not found))
-:: Verify if the environment was activated successfully
-if defined VIRTUAL_ENV (
-    echo "Virtual environment activated successfully."
-	pause
+:: Attempt to activate virtual environment in either .venv or venv
+if exist .\.venv\Scripts\activate.bat (
+    call .\.venv\Scripts\activate.bat
+) else if exist .\venv\Scripts\activate.bat (
+    call .\venv\Scripts\activate.bat
 ) else (
-    echo "Fail on environent activation."
+    echo Virtual environment activation script not found in .venv or venv.
     pause
-    exit
+    exit /b 1
 )
+
+:: Verify if the environment was activated successfully
+python -c "import sys; print(sys.prefix)" | findstr /i "venv" >nul
+if %errorlevel% neq 0 (
+    echo "Failed to activate the virtual environment."
+    pause
+    exit /b 1
+) else (
+    echo "Virtual environment activated successfully."
+    pause
+)
+
 echo.
 echo Press a button to start the web application
 pause
 start python udtBackEnd/manage.py runserver
 pause
+
 echo.
-echo Press a button to start python module
+echo Press a button to start the Python module
 pause
 call python main.py

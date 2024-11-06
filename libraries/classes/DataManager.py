@@ -9,7 +9,7 @@ from datetime import datetime
 
 
 #TODO: this class is responsible for managing all data. this means that has to be enriched
-# with management of SUMO results data, FIWARE data etc
+# with management of sumoenv results data, FIWARE data etc
 class DataManager:
     """
     The DataManager class manages database connections and interaction with multiple database managers
@@ -196,7 +196,7 @@ class TimescaleManager(DBManager):
                 return None
             query = (
                 f'SELECT entity_id, trafficflow, ST_X(location) as lat, ST_Y(location) as lon '
-                f'FROM mtopeniot.ettrafficloopdevices '
+                f'FROM mtopeniot.etdevice '
                 f'WHERE {timecolumn} LIKE %s AND dateobserved LIKE %s'
             )
             self.cursor.execute(query, (timeslot, queryDate))

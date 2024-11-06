@@ -199,7 +199,7 @@ class DigitalShadowManager:
 
     def saveShadowToCSV(self, shadowType: str, shadow: Shadow):
         """
-        Save shadow data to the CSV file inside the folder digital_shadows/shadowType.
+        Save shadow data to the CSV file inside the folder digitalshadows/shadowType.
         """
         directoryPath = os.path.join(shadowPath, shadowType)
         os.makedirs(directoryPath, exist_ok=True)

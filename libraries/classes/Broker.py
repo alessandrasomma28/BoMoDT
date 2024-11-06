@@ -16,7 +16,7 @@ from ngsildclient import Client, Entity, Rel
 from typing import Optional, List, Tuple
 from libraries.classes.DigitalShadowManager import DigitalShadowManager
 from libraries.constants import transportationCTX, roadSegmentType, roadType
-from libraries.general_utils import convertDate
+from libraries.utils.generalUtils import convertDate
 
 
 class ContextUpdateError(Exception):

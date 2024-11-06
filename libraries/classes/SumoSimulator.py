@@ -1,10 +1,10 @@
 # ****************************************************
 # Module Purpose:
-#   This library defines the Simulator class, which is responsible for interacting with the SUMO Simulator.
+#   This library defines the Simulator class, which is responsible for interacting with the sumoenv Simulator.
 #   The Simulator class manages the running of the simulation, from its start to its completion.
 #
 #   It provides various methods for controlling the simulation, gathering data on vehicles, induction loops,
-#   and managing traffic lights using the libtraci library for communication with the SUMO Simulator and the
+#   and managing traffic lights using the libtraci library for communication with the sumoenv Simulator and the
 #   running simulation inside it.
 #
 # ****************************************************
@@ -21,11 +21,11 @@ import traci.constants as tc
 
 class Simulator:
     """
-    The Simulator class provides an interface to interact with the SUMO traffic simulation
+    The Simulator class provides an interface to interact with the sumoenv traffic simulation
     environment using the libtraci library.
 
     Attributes:
-        configurationPath (str): Path to the SUMO configuration file.
+        configurationPath (str): Path to the sumoenv configuration file.
         routePath (str): Path to the route file used in the simulation.
         logFile (str): Path to the file where logs are saved.
         listener (libtraci.StepListener): A listener object for simulation steps.
@@ -33,13 +33,13 @@ class Simulator:
 
     Class Methods:
         - __init__: Constructor to initialize a new instance of the Simulator class.
-        - start: Method to start the SUMO simulation with or without the GUI.
-        - startBasic: Method to start the basic SUMO simulation configuration.
-        - startCongestioned: Method to start the SUMO simulation with congestion.
+        - start: Method to start the sumoenv simulation with or without the GUI.
+        - startBasic: Method to start the basic sumoenv simulation configuration.
+        - startCongestioned: Method to start the sumoenv simulation with congestion.
         - step: Method to execute a defined number of simulation steps.
         - oneHourStep: Method to advance the simulation by one hour (3600 seconds).
         - resume: Method to resume the simulation until no more vehicles remain.
-        - end: Method to end the simulation and close the connection to SUMO.
+        - end: Method to end the simulation and close the connection to sumoenv.
         - getRemainingVehicles: Method to retrieve the number of remaining vehicles in the simulation.
         - changeRoutePath: Method to change the route path for the simulation.
         - getVehiclesSummary: Method to gather and return vehicle statistics from the simulation.
@@ -59,7 +59,7 @@ class Simulator:
         """
         Initializes the Simulator with the given configuration file and log file.
 
-        :param configurationPath: Path to the SUMO configuration file.
+        :param configurationPath: Path to the sumoenv configuration file.
         :param logFile: Path to the log file where simulation logs will be saved.
         """
         self.configurationPath = configurationPath
@@ -77,12 +77,12 @@ class Simulator:
 
     def start(self, activeGui=False):
         """
-        Starts the SUMO simulation with or without the graphical user interface (GUI) based on the activeGui parameter.
+        Starts the sumoenv simulation with or without the graphical user interface (GUI) based on the activeGui parameter.
         If a simulation is already loaded, it will be overwritten.
 
-        :param activeGui: If True, starts the simulation with the SUMO GUI (sumo-gui).
+        :param activeGui: If True, starts the simulation with the sumoenv GUI (sumo-gui).
                          If False, starts the simulation without the GUI (sumo). Default is False.
-        :raises RuntimeError: If there is an issue starting the SUMO simulation.
+        :raises RuntimeError: If there is an issue starting the sumoenv simulation.
         """
         if libtraci.simulation.isLoaded():
             print("Warning: there was a previous simulation loaded. It will be overwritten")
@@ -93,12 +93,12 @@ class Simulator:
 
     def startBasic(self, activeGui=False):
         """
-        Starts the SUMO simulation with a basic configuration.
+        Starts the sumoenv simulation with a basic configuration.
         If a simulation is already loaded, it will be overwritten.
 
-        :param activeGui: If True, starts the simulation with the SUMO GUI (sumo-gui).
+        :param activeGui: If True, starts the simulation with the sumoenv GUI (sumo-gui).
                          If False, starts the simulation without the GUI (sumo). Default is False.
-        :raises RuntimeError: If there is an issue starting the SUMO simulation.
+        :raises RuntimeError: If there is an issue starting the sumoenv simulation.
         """
 
         # TODO: CHECK PERCHE' SEMBRA NON FUNZIONARE
@@ -110,12 +110,12 @@ class Simulator:
 
     def startCongestioned(self, activeGui=False):
         """
-        Starts the SUMO simulation with a congestioned scenario.
+        Starts the sumoenv simulation with a congestioned scenario.
         If a simulation is already loaded, it will be overwritten.
 
-        :param activeGui: If True, starts the simulation with the SUMO GUI (sumo-gui).
+        :param activeGui: If True, starts the simulation with the sumoenv GUI (sumo-gui).
                          If False, starts the simulation without the GUI (sumo). Default is False.
-        :raises RuntimeError: If there is an issue starting the SUMO simulation.
+        :raises RuntimeError: If there is an issue starting the sumoenv simulation.
         """
 
         if libtraci.simulation.isLoaded():
@@ -155,7 +155,7 @@ class Simulator:
     def resume(self):
         """
         Resumes the simulation, running continuously until no more vehicles remain in the simulation.
-        After the simulation completes, the connection to SUMO is closed.
+        After the simulation completes, the connection to sumoenv is closed.
 
         :raises RuntimeError: If the simulation fails to resume or end.
         """
@@ -165,7 +165,7 @@ class Simulator:
 
     def end(self):
         """
-        Ends the simulation and closes the connection to SUMO.
+        Ends the simulation and closes the connection to sumoenv.
 
         :return: True if the connection was successfully closed, False otherwise.
         :raises RuntimeError: If there is an issue closing the connection.

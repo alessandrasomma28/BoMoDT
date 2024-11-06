@@ -1,6 +1,6 @@
 from ngsildclient import Client, SubscriptionBuilder
 import typing
-from libraries.constants import roadSegmentType, trafficFlowObservedType, deviceType
+from libraries.constants import roadSegmentType, trafficFlowObservedType
 
 
 class QuantumLeapManager:
@@ -50,7 +50,7 @@ class QuantumLeapManager:
             elif entityType.lower() in ["trafficflowobserved", "traffic flow observed"]:
                 entityType = trafficFlowObservedType
             elif entityType.lower() == "device":
-                entityType = deviceType
+                entityType = "Device"
 
             subscriptionPayload = (
                 SubscriptionBuilder(notificationurl)

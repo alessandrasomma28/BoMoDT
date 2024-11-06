@@ -61,9 +61,11 @@ def simulation(request):
     current_dir = os.path.abspath(os.getcwd())
     current_path = Path(current_dir).resolve()
     project_root = current_path.parent
-    base_dir = project_root / 'SUMO' / 'joined' / 'scenarioCollection'
+    base_dir = project_root / 'sumoenv' / 'joined' / 'scenarioCollection'
     if not os.path.exists(base_dir):
-        base_dir = project_root / 'UrbanDigitalTwin' / 'SUMO' / 'joined' / 'scenarioCollection'
+        base_dir = project_root / 'MOBIDT' / 'sumoenv' / 'joined' / 'scenarioCollection'
+        if not os.path.exists(base_dir):
+            return render(request, 'udtApp/emptyPage.html', {'item': 'Scenario folder'})
 
     # Get the selected type (in the page filter). Default is 'basic'
     selected_type = request.GET.get('type', 'basic')
@@ -111,7 +113,7 @@ def serve_image(request, folder):
     current_dir = os.path.abspath(os.getcwd())
     current_path = Path(current_dir).resolve()
     project_root = current_path.parent
-    base_dir = project_root / 'SUMO' / 'joined' / 'scenarioCollection'
+    base_dir = project_root / 'sumoenv' / 'joined' / 'scenarioCollection'
     folder_path = os.path.join(base_dir, folder)
 
 

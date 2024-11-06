@@ -15,12 +15,12 @@ from datetime import datetime
 
 class DigitalTwinManager:
     """
-    The DigitalTwinManager class orchestrates the interaction between historical traffic data, SUMO simulations,
+    The DigitalTwinManager class orchestrates the interaction between historical traffic data, sumoenv simulations,
     and traffic planning to create a digital twin environment. This class is essential for running simulations
     based on real-world data to support traffic flow analysis.
 
     Attributes:
-       sumoSimulator (Simulator): An instance of the Simulator class, which runs the SUMO simulation.
+       sumoSimulator (Simulator): An instance of the Simulator class, which runs the sumoenv simulation.
        planner (Planner): An instance of the Planner class, responsible for scenario planning.
        dtDataManager (DataManager): An instance of the DataManager class, which handles data retrieval and storage.
 
@@ -35,11 +35,11 @@ class DigitalTwinManager:
 
     def __init__(self, dataManager: DataManager, sumoConfigurationPath: str, sumoLogFile: str):
         """
-        Initializes the DigitalTwinManager by creating instances of the DataManager, SUMO simulator, and Planner.
+        Initializes the DigitalTwinManager by creating instances of the DataManager, sumoenv simulator, and Planner.
 
         :param dataManager: Optional name for the DataManager (default is "DataManager").
-        :param sumoConfigurationPath: Path to the SUMO configuration file.
-        :param sumoLogFile: Path to the log file for SUMO.
+        :param sumoConfigurationPath: Path to the sumoenv configuration file.
+        :param sumoLogFile: Path to the log file for sumoenv.
         """
         # TODO: manage the possibility to get as input directly the simulator and the planner instances.
         self.dtDataManager = dataManager
@@ -58,7 +58,7 @@ class DigitalTwinManager:
         :param totalVehicles: The total number of vehicles to include in the simulation.
         :param minLoops: The minimum number of simulation loops to perform.
         :param congestioned: A boolean flag to indicate if the simulation should include congestion.
-        :param activeGui: Whether to activate the SUMO graphical user interface (GUI) during the simulation.
+        :param activeGui: Whether to activate the sumoenv graphical user interface (GUI) during the simulation.
         :param timecolumn: The name of the time column in the database used to retrieve historical data (default is "timeslot").
 
         :return: A string representing the folder where the scenario is stored.

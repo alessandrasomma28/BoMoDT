@@ -1,32 +1,27 @@
 import os
 import sys
-import psycopg2
-import typing
 import xml.etree.ElementTree as ET
-import pandas as pd
 import subprocess
-from datetime import datetime
 from tkinter import Tk     # from tkinter import Tk for Python 3.x
 from tkinter.filedialog import askopenfilename
 
 from libraries.classes.DataManager import *
-from libraries.classes import Agent
-from libraries import constants, general_utils
+from libraries import constants
 from libraries.classes.SumoSimulator import Simulator
-import scipy
+
 
 class ScenarioGenerator:
     """
     The ScenarioGenerator class handles traffic route scenarios, allowing them to be created and configured
-    for SUMO simulations. It generates route files and sets up these routes within the simulator.
+    for sumoenv simulations. It generates route files and sets up these routes within the simulator.
 
     Class Attributes:
-    - sumoConfiguration (str): Path to the SUMO configuration file.
+    - sumoConfiguration (str): Path to the sumoenv configuration file.
     - sim (Simulator): An instance of the Simulator class.
 
     Class Methods:
     - __init__: Constructor to initialize a new instance of the ScenarioGenerator class.
-    - generateRoutes: Method to generate a route file for SUMO simulation from an edgefile.
+    - generateRoutes: Method to generate a route file for sumoenv simulation from an edgefile.
     - setScenario: Method to set the current scenario in the simulator using a generated or manual route file.
     """
     sumoConfiguration: str
@@ -34,9 +29,9 @@ class ScenarioGenerator:
 
     def __init__(self, sumocfg: str, sim: Simulator):
         """
-        Initializes the ScenarioGenerator with the SUMO configuration file and the simulator instance.
+        Initializes the ScenarioGenerator with the sumoenv configuration file and the simulator instance.
 
-        :param sumocfg: Path to the SUMO configuration file.
+        :param sumocfg: Path to the sumoenv configuration file.
         :param sim: An instance of the Simulator class.
         """
         self.sumoConfiguration = sumocfg
@@ -59,14 +54,14 @@ class ScenarioGenerator:
 
     def generateRoutes(self, edgefile: str, folderPath: str, totalVehicles: int, minLoops: int = 1, congestioned: bool= False) -> str:
         """
-        Generates a route file for SUMO simulation starting from an edgefile that contains vehicle counts.
+        Generates a route file for sumoenv simulation starting from an edgefile that contains vehicle counts.
 
         :param edgefile: The path to the edgefile containing traffic counts.
         :param totalVehicles: The total number of vehicles to be generated in the route file.
         :param minLoops: Minimum number of loops or counting locations covered by each vehicle route.
         :param congestioned: Boolean flag to indicate whether the generated scenario should be congested.
         :return: The absolute path to the generated route file.
-        :raises FileNotFoundError: If the SUMO tools path does not exist.
+        :raises FileNotFoundError: If the sumoenv tools path does not exist.
         """
         if not edgefile:
             raise ValueError("No edgefile provided.")
@@ -74,7 +69,7 @@ class ScenarioGenerator:
             raise ValueError("The total number of vehicles was not defined.")
 
         if not os.path.exists(constants.sumoToolsPath):
-            raise FileNotFoundError("SUMO tools path does not exist.")
+            raise FileNotFoundError("sumoenv tools path does not exist.")
 
 
         script1 = constants.sumoToolsPath + "/randomTrips.py"
@@ -144,7 +139,7 @@ class ScenarioGenerator:
 
 class Planner:
     """
-    The Planner class manages traffic simulations by interacting with the SUMO simulator and integrating it with a database.
+    The Planner class manages traffic simulations by interacting with the sumoenv simulator and integrating it with a database.
     It also manages the scenario generation based on collected data.
 
     Class Attributes:

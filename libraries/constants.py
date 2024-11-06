@@ -1,15 +1,22 @@
+#Project Path
+import os.path
+from pathlib import Path
+path = Path((os.path.abspath(__file__)))
+projectPath = str(path.parent.parent.absolute())
+
+
 # environment variables file for the containers and their port
-containerEnvPath = "./docker-files/fiware-dt-platform/.env"
+containerEnvPath = "./fiwareenv/.env"
 
 # folder where processed traffic loops measures are stored (typically in a one-day length)
 # TODO: this tlpath should be corrected to collect all the daily datasets
 #  that are in the folder. For now, we are taking only the real flow to check if it's working.
-tlPath = "./traffic_loop_dataset/real_dataset"
+tlPath = "./data/realworlddata/mvenvdata"
 # folder where registered devices are stored
-outputPath = "./registered_devices/"
+outputPath = "./registereddevices/"
 
-shadowFilePath = "./digital_shadows/coordinates_roads_edge.csv"
-shadowPath = "./digital_shadows/"
+shadowFilePath = "./digitalshadows/coordinates_roads_edge.csv"
+shadowPath = "./digitalshadows/"
 
 
 ### SMART DATA MODELS RELATED CONSTANTS
@@ -18,16 +25,14 @@ deviceCTX="https://raw.githubusercontent.com/smart-data-models/dataModel.Device/
 roadSegmentType="https://smartdatamodels.org/dataModel.Transportation/RoadSegment"
 roadType="https://smartdatamodels.org/dataModel.Transportation/Road"
 trafficFlowObservedType = "https://smartdatamodels.org/dataModel.Transportation/TrafficFlowObserved"
-deviceType = "https://uri.etsi.org/ngsi-ld/default-context/TrafficLoopDevices"
 
-### SUMO-RELATED CONSTANTS
+
+### sumoenv-RELATED CONSTANTS
 # path where the data used for simulation are stored
-citySimulationDataPath = "./SUMO/bologna/data/"
-simulationDataPath = "./SUMO/joined/data/"
-citySimulationPath = "SUMO/bologna/"
-simulationPath = "SUMO/joined/"
+simulationDataPath = projectPath + "./data/preprocessing/data/"
+simulationPath = projectPath + "/sumoenv/joined/"
 sumoToolsPath = r"C:\Program Files (x86)\Eclipse\Sumo\tools"
 
-# Path where data for simulating different SUMO scenario are collected.
-scenarioCollectionPath = "SUMO/joined/scenarioCollection"
+# Path where data for simulating different sumoenv scenario are collected.
+scenarioCollectionPath = "sumoenv/joined/scenarioCollection"
 

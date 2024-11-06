@@ -26,7 +26,7 @@
 
 
 from libraries.constants import *
-from libraries.classes.PhysicalSystemConnector import *
+from mobilityvenv.PhysicalSystemConnector import *
 from libraries.classes.Agent import Agent
 import datetime
 
@@ -80,7 +80,7 @@ def setupPhysicalSystem(agentInstance: Agent) -> tuple[dict,list]:
 
 
     # Device and Measurement Registration to the IoT Agent
-    deviceEntityType = "TrafficLoopDevices"
+    deviceEntityType = "Device"
     for i in road:
         for sensor in road[i].sensors:
             if not agentInstance.isDeviceRegistered(str(sensor.devicePartialID)):
