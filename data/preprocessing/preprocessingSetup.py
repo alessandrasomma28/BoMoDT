@@ -9,7 +9,8 @@ from libraries.constants import TRAFFIC_FLOW_OPENDATA_FILE_PATH, ACCURACY_TRAFFI
 accurateInputFile = PROCESSED_DATA_PATH + 'accurate_traffic_flow.csv'
 netFile = SUMO_PATH + "static/joined_lanes.net.xml"
 
-processedTrafficFlow = PROCESSED_DATA_PATH + 'processed_traffic_flow.csv' ## CHI GENERA QUESTO FILE??
+processedTrafficFlow = PROCESSED_DATA_PATH + ('processed_traff'
+                                              'ic_flow.csv') ## CHI GENERA QUESTO FILE??
 
 def run():
 
