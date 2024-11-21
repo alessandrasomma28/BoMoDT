@@ -27,7 +27,6 @@ def run():
     #3. Generate correspondence between roadName and edge ID in SUMO net file and creating the SUMO detectors additional file for modeling real induction loop positions in SUMO net.
     generateRoadNamesFile(inputFile=TRAFFIC_FLOW_ACCURATE_FILE_PATH, sumoNetFile=SUMO_NET_PATH,detectorFilePath=SUMO_DETECTORS_ADD_FILE_PATH, roadNamesFilePath=ROAD_NAMES_FILE_PATH)
 
-
     #4. Fill missing edge IDs in the road names file.
     fillMissingEdgeId(ROAD_NAMES_FILE_PATH)
     linkEdgeId(inputFile=TRAFFIC_FLOW_ACCURATE_FILE_PATH, roadnameFile=ROAD_NAMES_FILE_PATH, outputFile=PROCESSED_TRAFFIC_FLOW_EDGE_FILE_PATH)
