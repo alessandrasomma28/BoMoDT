@@ -14,7 +14,9 @@ following a *Model-Driven Architecture* (MDA) approach and using automatized mod
 ## BoMoDT Deployment
 
 ### Device Compatibility
-The BoMoDT platform is deployed and tested on a Windows device. Its compatibility with Linux and macOS devices depends on the underlying technologies supporting the platform. While FIWARE is fully containerized and can potentially be adapted to other environments, compatibility with SUMO should be verified by consulting the Eclipse Documentation.
+The BoMoDT platform is deployed and tested on a Windows device. Its compatibility with Linux and macOS devices 
+depends on the underlying technologies supporting the platform. While FIWARE is fully containerized and can 
+potentially be adapted to other environments, compatibility with SUMO should be verified by consulting the [*Eclipse Documentation*](https://sumo.dlr.de/docs/Installing/index.html).
 
 <div align="center">
   <img src="images/bolognaism.png" alt="Bologna Image" width="300"/>
