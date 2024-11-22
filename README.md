@@ -69,22 +69,25 @@ README*](https://github.com/alessandrasomma28/MOBIDT/blob/main/fiwareenv/README.
    modules available in [**libraries**](https://github.com/alessandrasomma28/MOBIDT/tree/main/libraries). These modules are responsible for generating digital shadows (temporal data traces), creating and executing simulation scenarios, planning actions to be performed in the physical system, and orchestrating the overall Digital Twin system, respectively. 
 
 
-7. **Django WebApp & Grafana Dashboard**:
-    - Provides a user interface for monitoring:
-      - Context entities modeled with FIWARE Smart Data Models.
-      - Real-time traffic flow patterns.
-      - Simulation results and insights.
+7. **Django WebApp & Grafana Dashboard** provides a user interface for monitoring (i) context entities modeled with FIWARE Smart Data Models, real-time traffic flow patterns, and simulation results.
 
 
 
 ### Device Compatibility
-The BoMoDT platform is deployed and tested on a Windows device. Its compatibility with Linux and macOS devices 
-depends on the underlying technologies supporting the platform. While FIWARE is fully containerized and can 
-potentially be adapted to other environments, compatibility with SUMO should be verified by consulting the [*Eclipse Documentation*](https://sumo.dlr.de/docs/Installing/index.html).
+The BoMoDT platform is deployed and tested on a Windows device. Its compatibility with Linux and macOS devices depends on the underlying technologies supporting the platform. While FIWARE is fully containerized and can potentially be adapted to other environments, the Eclipse SUMO compatibility should be verified by consulting the [*Eclipse Documentation*](https://sumo.dlr.de/docs/Installing/index.html).
 
 <div align="center">
   <img src="images/BoMoDTDeploy.png" alt="Bologna Image" width="350"/>
   <p><b>Figure 2:</b> BoMoDT UML Deployment Diagram. </p>
 </div>
+
+BoMoDT consists of three execution environments:
+
+1. **Docker Environment** provides a containerized infrastructure for deploying FIWARE components, including IoT Agent JSON, Orion-LD, and QuantumLeap, along with MongoDB for current data storage and TimescaleDB for historical data storage. Additionally, Grafana is containerized and available for independent visualization and monitoring, separate from the Django WebApp.
+
+2. **Eclipse Simulator Engine** is responsible for performing urban mobility simulations.
+
+3. **Python Virtual Environment** hosts the Python modules generated through the MDA-based approach, alongside additional modules developed to implement and execute the Bologna MVENV.
+
 
 ## How to run BoMoDT
