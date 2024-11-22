@@ -61,7 +61,7 @@ README*](https://github.com/alessandrasomma28/MOBIDT/blob/main/fiwareenv/README.
    **Timescale**. QuantumLeap addresses the inherent limitation of the Context Broker, which only stores the current 
    state. Further details at [*FIWARE VENV README*](https://github.com/alessandrasomma28/MOBIDT/blob/main/fiwareenv/README.md)
 
-5. **Eclipse** [**SUMO**]: This is microscopic multi-modal traffic simulator that modeling individual road users, 
+5. **Eclipse SUMO**: This is microscopic multi-modal traffic simulator that modeling individual road users, 
    including cars, buses, and pedestrians, enabling detailed analysis of traffic phenomena like congestion and 
    emissions. Simulation data inputs and outputs are locally stored. Further details at [*SUMO README*](https://github.com/alessandrasomma28/MOBIDT/blob/main/sumoenv/README.md)
 
@@ -70,8 +70,6 @@ README*](https://github.com/alessandrasomma28/MOBIDT/blob/main/fiwareenv/README.
 
 
 7. **Django WebApp & Grafana Dashboard** provides a user interface for monitoring (i) context entities modeled with FIWARE Smart Data Models, real-time traffic flow patterns, and simulation results.
-
-
 
 ### Device Compatibility
 The BoMoDT platform is deployed and tested on a Windows device. Its compatibility with Linux and macOS devices depends on the underlying technologies supporting the platform. While FIWARE is fully containerized and can potentially be adapted to other environments, the Eclipse SUMO compatibility should be verified by consulting the [*Eclipse Documentation*](https://sumo.dlr.de/docs/Installing/index.html).
@@ -91,3 +89,5 @@ BoMoDT consists of three execution environments:
 
 
 ## How to run BoMoDT
+
+### 
