@@ -2,19 +2,10 @@ import os
 from libraries.utils.preprocessingUtils import *
 from libraries.constants import TRAFFIC_FLOW_OPENDATA_FILE_PATH, ACCURACY_TRAFFIC_LOOP_OPENDATA_FILE_PATH, SUMO_NET_PATH, SUMO_DETECTORS_ADD_FILE_PATH, PROCESSED_TRAFFIC_FLOW_EDGE_FILE_PATH
 
-#csv file to be filtered
-#inputFile = PROCESSED_DATA_PATH + 'traffic_flow_2024.csv'
-#accuracyFile = PROCESSED_DATA_PATH + 'accuratezza-spire-anno-2024.csv'
-
-accurateInputFile = PROCESSED_DATA_PATH + 'accurate_traffic_flow.csv'
-netFile = SUMO_PATH + "static/joined_lanes.net.xml"
-
-processedTrafficFlow = PROCESSED_DATA_PATH + ('processed_traff'
-                                              'ic_flow.csv') ## CHI GENERA QUESTO FILE??
-
 def run():
 
-    #1. Filter the Open Data traffic flow dataset w.r.t. traffic loop accuracy.
+    #1. Filter the Open Data traffic flow dataset to add direction to entries without directions and filter entries w.r.t. traffic loop accuracy.
+    fillMissingDirections(TRAFFIC_FLOW_OPENDATA_FILE_PATH)
     acceptedAccuracy = 95
     filterWithAccuracy(TRAFFIC_FLOW_OPENDATA_FILE_PATH, ACCURACY_TRAFFIC_LOOP_OPENDATA_FILE_PATH, date_column='data',sensor_id_column='codice_spira', output_file=TRAFFIC_FLOW_ACCURATE_FILE_PATH, accepted_percentage=acceptedAccuracy)
 

@@ -523,6 +523,8 @@ def generateRealFlow(inputFile: str):
     output_file = os.path.join(REAL_TRAFFIC_FLOW_DATA_MVENV_PATH, "real_traffic_flow.csv")
     df.to_csv(output_file, sep=';', index_label='index')
     print(f"Filtered real traffic flow data saved at '{output_file}'")
+
+
 def generateEdgeDataFile(input_file: str, date: str = "01/02/2024", time_slot: str = "00:00-01:00", duration: str = '3600'):
     """
     Generate an XML `edgedata` file for the route sampler in Eclipse SUMO.
@@ -569,6 +571,8 @@ def generateEdgeDataFile(input_file: str, date: str = "01/02/2024", time_slot: s
     ET.indent(tree, '  ')
     tree.write(EDGE_DATA_FILE_PATH, encoding="UTF-8", xml_declaration=True)
     print(f"Edge data XML saved at '{EDGE_DATA_FILE_PATH}'")
+
+
 def dailyFilter(inputFilePath: str, date: str):
     """
     Filter data by a specific date and save to a predefined daily traffic flow file.
@@ -641,5 +645,21 @@ def filteringDataset(inputFilePath: str, start_date: str, end_date: str, outputF
     filtered_df.to_csv(outputFilePath, sep=';', index=False)
     print(f"Filtered data from {start_date} to {end_date} saved at '{outputFilePath}'")
 
+def fillMissingDirections(inputFilePath: str, directionColumn = "direzione", defaultDirection = 'N'):
+    """
+    Fill missing direction in a traffic file. If a default direction is not set, North will be used.
+    Args:
+        inputFilePath: Path to the input CSV file.
+        directionColumn: column name where directions are defined.
+        defaultDirection: direction to use when a road w.o. direction is met.
 
+    Returns:
+        The function updates the CSV file in place.
+    """
+    # Load the dataset
+    df = pd.read_csv(inputFilePath, sep=';')
+    # Replace empty values in the direction column with 'N'.
+    df[directionColumn].fillna(defaultDirection, inplace=True)
+    # Save modified dataset
+    df.to_csv(inputFilePath, index=False, sep=';')
 
