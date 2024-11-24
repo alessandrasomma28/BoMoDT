@@ -88,14 +88,34 @@ BoMoDT consists of three execution environments:
 3. **Python Virtual Environment** hosts the Python modules generated through the MDA-based approach, alongside additional modules developed to implement and execute the Bologna MVENV.
 
 
+## BoMoDT Repository Structure
+
+
+
 ## BoMoDT Platform Execution
 
-The **BoMoDT** platform can be executed either manually via the command line or by using the provided bash script included in the repository. Below are the detailed steps to deploy and execute the BoMoDT platform.
+The **BoMoDT** platform can be executed either manually via the command line or by using the provided bash script 
+(for Windows OS) included in the repository. Below are the detailed steps to deploy and execute the BoMoDT platform.
+
+### Prerequisites
+Before executing the **BoMoDT** platform, ensure the following prerequisites are installed and properly configured on your system:
+
+- **Python >= 3.12**: Required to execute the core scripts and manage the environment. Install the latest version 
+  from  [Python.org](https://www.python.org/downloads/).
+- **Eclipse SUMO 1.19**: Necessary for traffic modeling and simulation. Download and install from [Eclipse SUMO]
+  (https://www.eclipse.org/sumo/).
+- **Docker and Docker Compose**: Required to deploy the FIWARE environment and associated components. Install the 
+  latest versions from [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/).
+- **Git**: Needed to clone the repository. Install Git from [Git SCM](https://git-scm.com/).
+- **System Requirements**: Sufficient disk space and computational power to run Docker containers, execute Eclipse 
+  simulator and store simulation results.
+
+Ensure all the above dependencies are installed and available in your system's `PATH` before proceeding with the 
+setup and execution of the platform.
 
 ---
 
 ### Deployment and Execution from Command Line
-
 1. Clone the repository to your local machine:
    ```bash
    git clone repository-url
@@ -111,9 +131,7 @@ After cloning the repository, the FIWARE environment must be activated to enable
     ```bash
    cd /path/to/repository/BoMoDT/fiwareenv
    ```
-> Ensure that the following files are present in the fiwareenv directory:
-    > docker-compose.yml
-    > .env
+> Ensure that the following files are present in the fiwareenv directory: docker-compose.yml and .env
 
 2. Deploy the required containers for Orion-LD, IoT Agent JSON, QuantumLeap, MongoDB, TimescaleDB, and Grafana by 
    running the following command:
@@ -148,9 +166,61 @@ using the provided **requirements.txt** file.
    ```bash
    python3 main.py
    ```
-   
+> **Note**: Running this command will activate the Bologna MVENV, initiating data transmission to the Digital Twin 
+> through FIWARE GEs. The simulation scenarios are automatically configured and executed in SUMO during this process.
 
 #### Django WebApp and Grafana Dashboard
+1. Navigate to webApp backend repository:
+    ```bash
+   cd path/to/repository/BoMoDT/udtBackEnd
+   ```
+2. Run the command: 
+    ```bash
+   python3 manage.py runserver
+   ```
+
+#### Eclipse SUMO Environment Setup
+The **Eclipse SUMO Simulator** is utilized during the execution of the BoMoDT platform for modeling and simulating 
+traffic scenarios. Additionally, Eclipse SUMO can be executed independently using the standalone configuration 
+provided in the folder [*sumoenv/standalone*](sumoenv/standalone).
+
+For detailed instructions on setting up and executing Eclipse SUMO, refer to the [*README.md*](sumoenv/README.md) 
+file located in the `sumoenv` folder.
+
+---
+
+### Deployment and Execution for Windows OS
+The [`setup.bat`](setup.bat) script is provided for setting up the environment and running the application.
+
+#### Prerequisites
+
+- **Docker**: Ensure Docker is running before executing the script. If Docker is not active, the script will terminate.
+- **Python Virtual Environment (venv)**: A Python virtual environment must be created beforehand, either using the  
+  steps outlined earlier or by setting it up in your preferred IDE (e.g., PyCharm, VSCode, etc.). The script will 
+  abort if no virtual environment is detected.
+
+#### Script Workflow
+The `setup.bat` script performs the following steps:
+1. Creates the required Docker containers.
+2. Activates the Python virtual environment.
+3. Verifies that the virtual environment is correctly activated.
+4. Runs the Django web application.
+5. Executes the `main.py` script to initialize and run the MVENV.
+
+#### Usage
+Run the script by executing:
+
+```bash
+setup.bat
+```
+or double clicking on `setup.bat` file. 
+
+
+
+
+
+
+
 
 
 

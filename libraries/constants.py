@@ -29,7 +29,7 @@ REAL_TRAFFIC_FLOW_DATA_MVENV_FILE_PATH = REAL_WORLD_DATA_PATH + "/mvenvdata/real
 REGISTERED_DEVICES_PATH = projectPath + "/registereddevices/"
 
 TRAFFIC_FLOW_OPENDATA_FILE_PATH = REAL_WORLD_DATA_PATH + "/opendata/traffic_flow_2024.csv"
-ACCURACY_TRAFFIC_LOOP_OPENDATA_FILE_PATH = REAL_WORLD_DATA_PATH + "/opendata/accuratezza-spire-anno-2024.csv"
+ACCURACY_TRAFFIC_LOOP_OPENDATA_FILE_PATH = REAL_WORLD_DATA_PATH + "/opendata/accuracy_loops_2024.csv"
 
 PROCESSED_DATA_PATH = projectPath + "/data/preprocessing/"
 TRAFFIC_FLOW_ACCURATE_FILE_PATH = PROCESSED_DATA_PATH + "/accurate_traffic_flow.csv"
