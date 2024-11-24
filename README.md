@@ -88,22 +88,69 @@ BoMoDT consists of three execution environments:
 3. **Python Virtual Environment** hosts the Python modules generated through the MDA-based approach, alongside additional modules developed to implement and execute the Bologna MVENV.
 
 
-## How to run BoMoDT
+## BoMoDT Platform Execution
 
-### Manual Deployment
-To manual deploy, firstly set up the docker environment:
-```
-docker-compose up -d
-```
-Make sure that the *_docker-compose.yml_* and the *_.env_* files are both in the same folder.
+The **BoMoDT** platform can be executed either manually via the command line or by using the provided bash script included in the repository. Below are the detailed steps to deploy and execute the BoMoDT platform.
 
-Then set up and activate the Python virtual environment 
+---
 
--- put commands for activating venv
-Make sure tha a *python virtual environment* has been previously created using requirements.txt file for installing required packages.
+### Deployment and Execution from Command Line
 
-Running WebApp
+1. Clone the repository to your local machine:
+   ```bash
+   git clone repository-url
+   ```
+2. Navigate to the repository directory:
+    ```bash
+   cd /path/to/repository/BoMoDT
+   ```
 
-### Bash 
+#### FIWARE Environment Setup
+After cloning the repository, the FIWARE environment must be activated to enable required components.
+1. Navigate to the fiwareenv directory:
+    ```bash
+   cd /path/to/repository/BoMoDT/fiwareenv
+   ```
+> Ensure that the following files are present in the fiwareenv directory:
+    > docker-compose.yml
+    > .env
 
-script set.bat
+2. Deploy the required containers for Orion-LD, IoT Agent JSON, QuantumLeap, MongoDB, TimescaleDB, and Grafana by 
+   running the following command:
+    ```bash
+   docker-compose up -d
+   ```
+Further details are provided in the folder [*README.md*](fiwareenv/README.md). 
+
+#### MVENV and Python Environment Setup
+Before running `main.py` script, a Python Virtual Environment must be activated. The environment can be created 
+using the provided **requirements.txt** file. 
+
+1. Create and activate a Python virtual environment in repository directory:
+    1. If virtualenv is not installed in your local machine, install it by running:
+   ```bash
+   python3 -m pip install virtualenv
+   ```
+   2. Create a Python virtual environment:
+   ```bash
+   virtualenv venv
+   ```
+   3. Activate the virtual environment:
+   ```bash
+   source venv/bin/activate
+   ```
+2. Once the Python virtual environment has been created and activated, install the required Python packages using the 
+   **requirements.txt**:
+    ```bash
+   pip3 install -r requirements.txt
+   ```
+3. Run the `main.py` script: 
+   ```bash
+   python3 main.py
+   ```
+   
+
+#### Django WebApp and Grafana Dashboard
+
+
+
