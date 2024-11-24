@@ -90,4 +90,20 @@ BoMoDT consists of three execution environments:
 
 ## How to run BoMoDT
 
-### 
+### Manual Deployment
+To manual deploy, firstly set up the docker environment:
+```
+docker-compose up -d
+```
+Make sure that the *_docker-compose.yml_* and the *_.env_* files are both in the same folder.
+
+Then set up and activate the Python virtual environment 
+
+-- put commands for activating venv
+Make sure tha a *python virtual environment* has been previously created using requirements.txt file for installing required packages.
+
+Running WebApp
+
+### Bash 
+
+script set.bat
