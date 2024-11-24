@@ -89,8 +89,67 @@ BoMoDT consists of three execution environments:
 
 
 ## BoMoDT Repository Structure
+The repository is structured to support the **BoMoDT** platform, providing modules for data handling, traffic  
+simulation, Digital Twin modeling, and backend management. Below is the detailed structure of the repository:
 
-
+```plaintext
+├── BoMoDT
+│   ├── data
+│   │   ├── digitalshadow               # Contains the digital shadows used and updated in the platform.
+│   │   ├── preprocessing
+│   │   │   ├── preprocessingSetup.py   # Python script to handle data preprocessing.
+│   │   │   └── README.md               # Documentation for preprocessing steps and files.
+│   │   ├── realworlddata
+│   │   │   ├── mvenvdata               # Traffic data used by the Bologna MVENV.
+│   │   │   ├── opendata                # Traffic data retrieved by the Bologna Open Data.
+│   │   └── README.md                   # Documentation for the folder, including details and potential updates 
+│   │                                   # if the real dataset is modified.
+│   │
+│   ├── fiwareenv
+│   │   ├── .env                        # Environment variables file for configuring FIWARE components.
+│   │   ├── docker-compose.yml          # Docker Compose file for deploying FIWARE components.
+│   │   └── README.md                   # Documentation for setting up the FIWARE environment.
+│   │
+│   ├── libraries
+│   │   ├── classes
+│   │   │   ├── Agent.py                # Manages interaction with FIWARE IoT Agent JSON.
+│   │   │   ├── Broker.py               # Manages interaction with FIWARE Context Broker Orion-LD.
+│   │   │   ├── DataManager.py          # Handles data storage and retrieval processes.
+│   │   │   ├── DigitalShadowManager.py # Manages digital shadows for the simulation.
+│   │   │   ├── DigitalTwinManager.py   # Orchestrates the Digital Twin system.
+│   │   │   ├── Planner.py              # Implements planning actions and scenario generation.
+│   │   │   ├── SubscriptionManager.py  # Manages subscriptions through FIWARE QuantumLeap.
+│   │   │   └── SumoSimulator.py        # Facilitates interaction with the SUMO Simulator.
+│   │
+│   ├── utils
+│   │   ├── generalUtils.py             # Provides generic utility functions used across the project.
+│   │   ├── preprocessingUtils.py       # Implements utilities for data preprocessing and transformation.
+│   │   └── constants.py                # Stores constants such as configurations and file paths.
+│   │
+│   ├── mobilityvenv
+│   │   ├── MobilityVirtualEnvironment.py # Defines the Mobility Virtual Environment.
+│   │   ├── PhysicalSystemConnector.py    # Defines the connector within a physical system made of sensors and actuators.
+│   │
+│   ├── sumoenv
+│   │   ├── standalone
+│   │   │   └── (configuration files for standalone execution of Eclipse SUMO).
+│   │   ├── static
+│   │   │   └── (static files used for simulation).
+│   │   ├── README.md                   # Documentation for configuring and executing the SUMO environment.
+│   │   └── run.sumocfg                 # SUMO configuration file for executing traffic simulations.
+│   │
+│   ├── udtBackEnd
+│   │   ├── udtApp                      # Contains application logic for the webApp backend.
+│   │   ├── udtBackEnd                  # Handles backend functionality for the Digital Twin WebApp.
+│   │   ├── db.sqlite3                  # SQLite database file storing application data.
+│   │   ├── manage.py                   # Entry point for managing the WebApp backend.
+│
+├── LICENSE                             # Licensing information for the repository.
+├── main.py                             # Main script for executing the BoMoDT platform.
+├── README.md                           # Documentation for understanding and using the repository.
+├── requirements.txt                    # Lists all Python dependencies required for the project.
+├── setup.bat                           # Batch script for setting up the environment on Windows.
+```
 
 ## BoMoDT Platform Execution
 
@@ -207,9 +266,7 @@ The `setup.bat` script performs the following steps:
 4. Runs the Django web application.
 5. Executes the `main.py` script to initialize and run the MVENV.
 
-#### Usage
 Run the script by executing:
-
 ```bash
 setup.bat
 ```
