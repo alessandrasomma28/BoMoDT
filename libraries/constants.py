@@ -42,6 +42,7 @@ DAILY_TRAFFIC_FLOW_FILE_PATH = PROCESSED_DATA_PATH + "/daily_flow.csv"
 SUMO_PATH = projectPath + "/sumoenv"
 SUMO_NET_PATH = SUMO_PATH + "/static/joined_lanes.net.xml"
 SUMO_DETECTORS_ADD_FILE_PATH = SUMO_PATH + "/static/detectors.add.xml"
+SUMO_LOG_PATH = SUMO_PATH + "/sumolog/commandlog.txt"
 
 
 SUMO_TOOLS_PATH = r"C:\Program Files (x86)\Eclipse\Sumo\tools"

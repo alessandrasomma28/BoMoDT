@@ -105,7 +105,7 @@ def startPhysicalSystem(roads: dict[int, PhysicalSystemConnector]):
 
     :param roads: A dictionary of roads initialized in the setupPhysicalSystem function.
     """
-
+    firstTimeSlot = "00:00-01:00"
     [trafficData, files] = readingFiles(REAL_TRAFFIC_FLOW_DATA_MVENV_PATH)
     for i, file in enumerate(files):
         tlColumnsNames = ["index", "date", "flow", "road_name", "ID_loop", "geopoint", "direction"]
@@ -114,5 +114,5 @@ def startPhysicalSystem(roads: dict[int, PhysicalSystemConnector]):
             tempTimeSlot = str(datetime.time(i).strftime("%H:00")) + '-' + str(datetime.time(i+1).strftime("%H:00"))
             tempData = trafficData[file][["index", "data", tempTimeSlot, "Nome via", "ID_univoco_stazione_spira", "geopoint", "direzione"]]
             tempData.columns = tlColumnsNames
-            processingTlData(tempTimeSlot, tempData, roads)
-            time.sleep(10)
+            processingTlData(tempTimeSlot, tempData, roads, firstTimeSlot=firstTimeSlot)
+            #time.sleep(10)

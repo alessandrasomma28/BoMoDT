@@ -491,6 +491,8 @@ def filterForShadowManager(inputFile: str):
 
     # Save the filtered DataFrame to a CSV file in the specified directory
     df.to_csv(os.path.join(SHADOW_TYPE_FILE_PATH), sep=';', index=False)
+
+
 def generateRealFlow(inputFile: str):
     """
     Generate a real traffic flow file with selected columns.
@@ -645,7 +647,7 @@ def filteringDataset(inputFilePath: str, start_date: str, end_date: str, outputF
     filtered_df.to_csv(outputFilePath, sep=';', index=False)
     print(f"Filtered data from {start_date} to {end_date} saved at '{outputFilePath}'")
 
-def fillMissingDirections(inputFilePath: str, directionColumn = "direzione", defaultDirection = 'N'):
+def fillMissingDirections(inputFilePath: str, directionColumn="direzione", defaultDirection='N'):
     """
     Fill missing direction in a traffic file. If a default direction is not set, North will be used.
     Args:
@@ -658,8 +660,13 @@ def fillMissingDirections(inputFilePath: str, directionColumn = "direzione", def
     """
     # Load the dataset
     df = pd.read_csv(inputFilePath, sep=';')
-    # Replace empty values in the direction column with 'N'.
-    df[directionColumn].fillna(defaultDirection, inplace=True)
-    # Save modified dataset
+
+    # Replace empty or NaN values in the direction column with the defaultDirection
+    df[directionColumn] = df[directionColumn].fillna(defaultDirection)
+
+    # Save the modified dataset back to the same file
     df.to_csv(inputFilePath, index=False, sep=';')
+
+    print(f"Missing values in '{directionColumn}' filled with default direction '{defaultDirection}'. File updated: {inputFilePath}")
+
 

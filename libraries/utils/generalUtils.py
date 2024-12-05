@@ -5,6 +5,7 @@ import secrets
 import time
 from datetime import datetime, timedelta
 import random
+from threading import Event
 
 def readingFiles(folder: str):
     """
@@ -50,24 +51,10 @@ def convert_float(inp):
     splitted_data = inp.split(",")
     return float(splitted_data[-2]), float(splitted_data[-1])
 
-''' PREVIOUS FUNCTION --> TO BE DELETED
-def processingTlData(trafficData, trafficLoop):
-    # for key, values in trafficData.items():
-        # iterate through registered devices
-        for ind, device in trafficLoop.items():
-            # look for sensor belonging to device (only one in the traffic loop case)
-            for sensor in device.sensors:
-                if sensor.name == "TFO":
-                    tl = trafficData.loc[trafficData["ID_loop"] == int(sensor.device_partial_id)]
-                    flow = tl["flow"].values[0]
-                    coordinates = tl["geopoint"].values[0]
-                    # coordinates = list(map(float, coordinates))
-                    coordinates = convert_float(coordinates)
-                    direction = str(tl["direction"].values[0])
-                    sensor.send_data(flow, coordinates, direction, device_id=sensor.device_partial_id, device_key=sensor.api_key)
-'''
 
-def processingTlData(timeSlot, trafficData, roads: dict):
+firstTimeslotEvent = Event()
+def processingTlData(timeSlot, trafficData, roads: dict, firstTimeSlot : str ="00:00-01:00"):
+    allFirstTimeslotDataSent = (timeSlot == firstTimeSlot)
     for index, row in trafficData.iterrows():
         trafficFlow = row["flow"]
         raw_coordinates = row["geopoint"]
@@ -83,8 +70,15 @@ def processingTlData(timeSlot, trafficData, roads: dict):
                 trafficLoopSensor.sendData(date, timeSlot, trafficFlow, coordinates, direction,
                                            device_id=trafficLoopSensor.devicePartialID,
                                            device_key=trafficLoopSensor.apiKey)
-        time.sleep(1) #simulating a sort of delay among entries
+                # If this row is not part of the first timeslot, unset the flag
+        if timeSlot != firstTimeSlot:
+            allFirstTimeslotDataSent = False
 
+        time.sleep(1) #simulating a sort of delay among entries
+        # If this is the first timeslot and all rows are processed, set the event
+    if allFirstTimeslotDataSent:
+        firstTimeslotEvent.set()
+        print(f"All data for the first timeslot ({firstTimeSlot}) across the dataset has been sent.")
 
 #Function to convert geopoint format having a number without dots
 def convert_format(value):
